@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Devlat_Blog::blog" title="Blog" module="Devlat_Blog" sortOrder="51" resource="Devlat_Blog::blog"/>
+        <add id="Devlat_Blog::posts" title="Posts" module="Devlat_Blog" sortOrder="10" action="devlat_blog/post"
+             resource="Devlat_Blog::posts" parent="Devlat_Blog::blog"/>
+    </menu>
+</config>

@@ -2,9 +2,9 @@
 
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="blog_posts" resource="default" engine="innodb"
+    <table name="blog_post" resource="default" engine="innodb"
            comment="Stores all posts data for the blog">
-        <column xsi:type="int" name="id" unsigned="false" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="varchar" name="title" nullable="false" length="128" comment="Title"/>
         <column xsi:type="date" name="publish_date" nullable="false" comment="Publish Date"/>
         <column xsi:type="text" name="content" nullable="true" comment="Content"/>

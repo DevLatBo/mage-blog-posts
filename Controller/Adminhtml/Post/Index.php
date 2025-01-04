@@ -2,29 +2,33 @@
 
 namespace Devlat\Blog\Controller\Adminhtml\Post;
 
-
-use Devlat\Blog\Model\ResourceModel\Post\Collection;
-use Devlat\Blog\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index implements HttpGetActionInterface
+class Index extends Action implements HttpGetActionInterface
 {
 
-    private PageFactory $pageFactory;
-    private PostCollectionFactory $postColletionFactory;
+    const ADMIN_RESOURCE = 'Devlat_Blog::posts';
 
     /**
+     * @var PageFactory
+     */
+    private PageFactory $pageFactory;
+
+    /**
+     * @param Context $context
      * @param PageFactory $pageFactory
      */
     public function __construct(
-        PageFactory $pageFactory,
-        PostCollectionFactory $postColletionFactory
+        Context $context,
+        PageFactory $pageFactory
     )
     {
+        parent::__construct($context);
         $this->pageFactory = $pageFactory;
-        $this->postColletionFactory = $postColletionFactory;
     }
 
     /**
@@ -33,15 +37,8 @@ class Index implements HttpGetActionInterface
      */
     public function execute() : Page
     {
-        /** @var Collection $collection */
-        $collection = $this->postColletionFactory->create();
-
-        foreach($collection as $item) {
-            echo "<pre>";
-            var_dump($item->getData());
-            echo "</pre>";
-        }
         $resultPage = $this->pageFactory->create();
+        $resultPage->setActiveMenu('Devlat_Blog::posts');
         $resultPage->getConfig()->getTitle()->prepend(__("Posts"));
 
         return $resultPage;

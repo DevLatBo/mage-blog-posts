@@ -13,7 +13,7 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="blog_post_grid_list_data_source" xsi:type="string">Devlat\Blog\Model\ResourceModel\Post\Grid\Collection</item>
+                <item name="devlat_blog_post_listing_data_source" xsi:type="string">Devlat\Blog\Model\ResourceModel\Post\Grid\Collection</item>
             </argument>
         </arguments>
     </type>

@@ -51,12 +51,16 @@ class Action extends Column
             }
 
             $item[$this->getData('name')]['edit'] = [
-                'href'  =>  $this->urlBuilder->getUrl('blog/post/action', ['id' => $item['id']]),
+                'href'  =>  $this->urlBuilder->getUrl('blog/post/add', ['id' => $item['id']]),
                 'label' =>  __('Edit'),
             ];
             $item[$this->getData('name')]['delete'] = [
                 'href'  => $this->urlBuilder->getUrl('blog/post/delete', ['id' => $item['id']]),
                 'label' =>  __('Delete'),
+                'confirm'   => [
+                    'title' =>  __('Delete %1', $item['title']),
+                    'message'   =>  __('Are you sure yoo want to delete the "%1" record?', $item['title']),
+                ],
             ];
         }
         return $dataSource;

@@ -46,6 +46,20 @@
         </settings>
         <paging name="listing_paging"/>
         <columnsControls name="column_controls"/>
+        <bookmark name="bookmarks"/>
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="applied" xsi:type="array">
+                        <item name="publish_date" xsi:type="array">
+                            <item name="from" xsi:type="string">10/10/2010</item>
+                            <item name="to" xsi:type="string">01/01/2024</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </filters>
+        <filterSearch name="fulltext"/>
     </listingToolbar>
     <columns name="devlat_blog_post_columns">
         <settings>

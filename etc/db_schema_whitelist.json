@@ -8,6 +8,9 @@
         },
         "constraint": {
             "PRIMARY": true
+        },
+        "index": {
+            "BLOG_POST_TITLE": true
         }
     }
 }

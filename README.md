@@ -244,14 +244,25 @@ Las columnas se las elabora de la siguiente manera:
         <settings>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.actions</item>
-                    <item name="target" xsi:type="string">applyAction</item>
+                    <item name="provider" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns_editor</item>
+                    <item name="target" xsi:type="string">startEdit</item>
                     <item name="params" xsi:type="array">
-                        <item name="0" xsi:type="string">edit</item>
-                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
                     </item>
                 </param>
             </childDefaults>
+            <editorConfig>
+                <param name="clientConfig" xsi:type="array">
+                    <item name="saveUrl" xsi:type="url" path="*/*/inlineEdit"/>
+                    <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                </param>
+                <param name="selectProvider" xsi:type="string">
+                    devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.ids
+                </param>
+                <param name="indexField" xsi:type="string">id</param>
+                <param name="enabled" xsi:type="boolean">true</param>
+            </editorConfig>
         </settings>
         <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
@@ -269,6 +280,12 @@ Las columnas se las elabora de la siguiente manera:
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Title</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">text</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
                     <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
@@ -281,6 +298,12 @@ Las columnas se las elabora de la siguiente manera:
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="dateFormat" xsi:type="string">dd/MM/Y</item>
                     <item name="label" xsi:type="string" translate="true">Publish Date</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">date</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
                     <item name="sortOrder" xsi:type="number">20</item>
                 </item>
             </argument>
@@ -297,9 +320,33 @@ Las columnas se las elabora de la siguiente manera:
         </actionsColumn>
     </columns>
 ```
-Para empezar usamos el applyAction para poder hacer cada fila clickeable y nos redirija al edit, selectionsColumn es 
+
+Actualmente se esta usando para la edicion inlineEdit, es decir si haces clic en una linea puedes 
+editar los datos desde la grid, es por eso que declaramos el startEdit y agregando en las columnas 
+que deseamos que puedan ser editables el nodo "editor
+```xml
+<item name="editor" xsi:type="array">
+...
+</item>
+```
+
+
+Puedes tambien usar el applyAction para poder hacer cada fila clickeable y nos redirija al edit, selectionsColumn es 
 usado para poder generar los checkbox para cada fila y las filas son ordenadas de orden descendiente 
 por medio de la ID.
+Recuerda entonces de que si deseas que cada fila sea cliqueable para redigir al edit form toma en cuenta esto:
+```xml
+    <childDefaults>
+        <param name="fieldAction" xsi:type="array">
+            <item name="provider" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.actions</item>
+            <item name="target" xsi:type="string">applyAction</item>
+            <item name="params" xsi:type="array">
+                <item name="0" xsi:type="string">edit</item>
+                <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+            </item>
+        </param>
+    </childDefaults>
+```
 
 Luego como veran tenemos las otras columnas para title y publish_date con sus respectivas configuraciones, para 
 actionsColumn usamos para poder generar enlaces tipo dropdown de EDIT y DELETE. **OJO**, este requiere 
@@ -329,3 +376,13 @@ paginacion:
         </argument>
     </filters>
 ```
+
+### IMPORTANTE:
+Para el funcion amiento del filtersearch y que busque por el title, hay que volver al archivo 
+db_schema.xml y agregar el siguiente nodo:
+```xml
+    <index referenceId="BLOG_POST_TITLE" indexType="fulltext">
+            <column name="title"/>
+    </index>
+```
+Luego puede proceder con la prueba del campo filterSearch en base al `title`.

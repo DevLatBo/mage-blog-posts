@@ -62,7 +62,17 @@ class InitialPosts implements DataPatchInterface
                 'title'         =>  'Corruption',
                 'publish_date'  =>  '2001-01-30',
                 'content'       =>  'There is an investigation about it.'
-            ]
+            ],
+            [
+                'title'         =>  'Extra Special!',
+                'publish_date'  =>  '2018-07-14',
+                'content'       =>  'Just another topic.'
+            ],
+            [
+                'title'         =>  'Whatever',
+                'publish_date'  =>  '2016-05-10',
+                'content'       =>  'Just for testing.'
+            ],
         ];
         $connection->insertMultiple('blog_post', $data);
         $this->moduleDataSetup->endSetup();

@@ -323,7 +323,7 @@ Las columnas se las elabora de la siguiente manera:
 ```
 
 Actualmente se esta usando para la edicion inlineEdit, es decir si haces clic en una linea puedes 
-editar los datos desde la grid, es por eso que declaramos el startEdit y agregando en las columnas 
+editar los datos desde la grid, es por eso que declaramos el startEdit y agregando en las columnas
 que deseamos que puedan ser editables el nodo item con name "editor"
 
 NOTA: Vease de que el inlineEdit requiere de un controlador, por lo que tenemos el controlador desarrollado 

@@ -1,0 +1,16 @@
+{
+    "blog_post": {
+        "column": {
+            "id": true,
+            "title": true,
+            "publish_date": true,
+            "content": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        },
+        "index": {
+            "BLOG_POST_TITLE": true
+        }
+    }
+}

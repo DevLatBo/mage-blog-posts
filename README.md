@@ -21,7 +21,8 @@ la elaboración de tareas.
 * [Menu](#menu)
 * [Virtual Type](#virtual-type)
 * [UI Listing Layout](#ui-listing-layout)
-* 
+* [DataProvider](#dataprovider)
+* [UI Componnet](#ui-component)
 
 ## Creacion tabla para BD
 Como primer paso se recomienda crear una tabla para la base de 
@@ -414,3 +415,128 @@ Luego puede proceder con la prueba del campo filterSearch en base al `title`.
 
 Requerimos de un controlador MassDelete: `Devlat\Blog\Controller\Adminhtml\Post\MassDelete` donde aplicamos la 
 lógica  de como se ejecutará la eliminación de los items en tabla `blog_post`.
+
+## DATAPROVIDER
+Creamos como siguiente paso el data provider en la siguiente ruta: `Devlat\Blog\Ui\DataProvider\Post`.
+justo ahi necesitaremos para tener datos mejor estructurados para nuestros UI Components.
+
+## UI Component
+Creamos el UI component para el add en `view/adminhtml/layout/blog_post_add.xml` en donde creamos el componente:
+
+```xml
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="devlat_blog_post_form"/>
+        </referenceContainer>
+    </body>
+```
+
+El cual necesitamos para el form, ahora creando el archivo `view/adminhtml/ui_component/devlat_blog_post_form.xml`.
+Aca configuramos el form component para que guarde la data:
+```xml
+    <argument name="data" xsi:type="array">
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <namespace>devlat_blog_post_form</namespace>
+        <dataScope>data</dataScope>
+    </settings>
+```
+Por ello es wue precisamos de usar el dataScope, la data sera guardada en la propiedad "data", y la razon es que en JS
+ en modulo Magneto_Ui en `view/base/web/js/form/provider.js` se tiene definido asi la propiedad en metodo **save()**.
+
+Lo siguiente es agregar el dataSource con el dataProvider incluido:
+```xml
+    <dataSource name="devlat_blog_post_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider class="Devlat\Blog\Ui\DataProvider\Post" name="devlat_blog_post_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+```
+
+El name de dataSource se lo nomina de la siguiente manera: 
+`<nombre del vendor>_<nombre del modulo>_<entity>_data_source`.
+El name del dataProvider debe coincidir con el dataSource y el class apuntar a la clase dataProvider 
+que creamos recientemente apuntando con la primary key de la tabla blog_post.
+
+Lo siguiente e agregar el data source como dependencia del UI Component para que pueda cargar los datos de la tabla:
+```xml
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">devlat_blog_post_form.devlat_blog_post_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <namespace>devlat_blog_post_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>devlat_blog_post_form.devlat_blog_post_data_source</dep>
+        </deps>
+    </settings>
+```
+Justo asi es como declaramos en nodo provider el data source y definimos la dependencia en settings.
+
+Procedemos con agregar campos al form de Post:
+
+```xml
+    <fieldset name="devlat_blog_post_fieldset">
+        <settings>
+            <label/>
+        </settings>
+        <field name="id" formElement="hidden"/>
+        <field name="title" formElement="input">
+            <settings>
+                <label translate="true">Title</label>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+        <field name="content" formElement="textarea">
+            <settings>
+                <label translate="true">Content</label>
+                <dataType>text</dataType>
+            </settings>
+            <formElements>
+                <textarea>
+                    <settings>
+                        <rows>3</rows>
+                    </settings>
+                </textarea>
+            </formElements>
+        </field>
+        <field name="publish_date" formElement="date">
+            <settings>
+                <label translate="true">Publish Date</label>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+    </fieldset>
+```
+Agregamos el boton de Save que ejecutara accion tanto de Add como Edit, en este caso lo agregamos al xml de 
+`devlat_blog_post_form.xml` de la siguiente manera:
+En nodo settings, agregamos:
+```xml
+    <buttons>
+        <button name="save" class="Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Save"/>
+    </buttons>
+```
+
+Por lo que la estructura del boton esta basado en el block que requiere el boton, y eso lo encuentra en la ruta que 
+puede observar en el nodo `button` dentro de `buttons`.
+
+Para que el boton funcione debemos darle una ruta para que lleve a un controlador `save` encargado de que haga 
+el Add o Edit, por lo que agregamos dentro del nodo `dataSource` lo siguiente:
+```xml
+    <settings>
+        <submitUrl path="*/*/save"></submitUrl>
+    </settings>
+```
+**IMPORTANTE: ** Recuerda que el settings debes situarlo antes del dataProvider, dado que el XML mostrará un error.

@@ -22,7 +22,7 @@ la elaboración de tareas.
 * [Virtual Type](#virtual-type)
 * [UI Listing Layout](#ui-listing-layout)
 * [DataProvider](#dataprovider)
-* [UI Componnet](#ui-component)
+* [Form](#form)
 
 ## Creacion tabla para BD
 Como primer paso se recomienda crear una tabla para la base de 
@@ -85,7 +85,7 @@ Donde
 * `Devlat_Blog::post_save` Agrega o editar post
 * `Devlat_Blog::post_delete` Eliminar post.
 
-## UI Component
+## Form
 Se crea el file: `view/adminhtml/layout/blog_post_index.xml`
 Acá es donde se declará únicamente el componente a usar para el grid:
 ```xml
@@ -540,3 +540,26 @@ el Add o Edit, por lo que agregamos dentro del nodo `dataSource` lo siguiente:
     </settings>
 ```
 **IMPORTANTE: ** Recuerda que el settings debes situarlo antes del dataProvider, dado que el XML mostrará un error.
+
+En el controlador Save (`Devlat\Blog\Controller\Adminhtml\Post\Save`) está toda la lógica de edit y add del Post.
+
+Para el agregado del boton ATRAS, es sencillo, necesitamos solo de la clase 
+`Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Back` y en el xml lo agregamos tal como hicimos con el botton Save:
+```xml
+    <button name="save" class="Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Save"/>
+```
+
+Y como último detalle no olvides que las validaciones en los campos son vitales para tener datos bien 
+almacenados, por ello en los fields agregamos reglas como ser:
+```xml
+    <validation>
+        <rule name="required-entry" xsi:type="boolean">true</rule>
+    </validation>
+```
+
+Puedes agregar una o más reglas para tus fields.
+
+---
+
+Sigue cuidadosamente la elaboración de tu grid, puede que este README te ayude y sea de mayor 
+utilidad para el desarrollo y este módulo te ahorre tiempo a futuro en tu trabajo.

@@ -10,6 +10,7 @@
     </argument>
     <settings>
         <buttons>
+            <button name="back" class="Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Back"/>
             <button name="save" class="Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Save"/>
         </buttons>
         <namespace>devlat_blog_post_form</namespace>
@@ -25,7 +26,7 @@
             </item>
         </argument>
         <settings>
-            <submitUrl path="*/*/save"></submitUrl>
+            <submitUrl path="*/*/save"/>
         </settings>
         <dataProvider class="Devlat\Blog\Ui\DataProvider\Post" name="devlat_blog_post_data_source">
             <settings>
@@ -43,6 +44,9 @@
             <settings>
                 <label translate="true">Title</label>
                 <dataType>text</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
         </field>
         <field name="content" formElement="textarea">
@@ -62,6 +66,10 @@
             <settings>
                 <label translate="true">Publish Date</label>
                 <dataType>text</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
         </field>
     </fieldset>

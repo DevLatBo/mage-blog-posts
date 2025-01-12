@@ -44,7 +44,7 @@ Para esta acción requeriremos de ayuda de un Patch, usted puede
 colocar los datos que desee, pero recomiendo  que pueda tener como 10 filas 
 insertadas en la tabla `blog_post`.
 
-En éste módulo podra encontrar el patch en `Devlat\Blog\Setup\Patch\Data\InitialPosts` en 
+En éste módulo encontrará el patch en `Devlat\Blog\Setup\Patch\Data\InitialPosts` en 
 donde podrá ver que se insertan datos gracias a una dependencia (`resourceConnection`).
 
 ## Creacion de Model
@@ -85,7 +85,7 @@ Donde
 * `Devlat_Blog::post_save` Agrega o editar post
 * `Devlat_Blog::post_delete` Eliminar post.
 
-## Form
+## UI Component
 Se crea el file: `view/adminhtml/layout/blog_post_index.xml`
 Acá es donde se declará únicamente el componente a usar para el grid:
 ```xml
@@ -129,7 +129,7 @@ Por lo que BLOG es el boton visible en el menu y POSTS es el item que nos
 redirigirá al grid y para ello requerimos de un controlador: `Devlat\Blog\Controller\Adminhtml\Post\Index`.
 
 ## Virtual Type
-Se tiene creado el archivo etc/di.xml donde definimos el source data desde la 
+Se tiene creado el archivo etc/di.xml donde definimos el source data con la 
 tabla `blog_post` que usaremos en el grid:
 ```xml
     <virtualType name="Devlat\Blog\Model\ResourceModel\Post\Grid\Collection"
@@ -322,6 +322,8 @@ Las columnas se las elabora de la siguiente manera:
         </actionsColumn>
     </columns>
 ```
+Note que tenemos selectionsColumn que es usado para poder generar los checkbox para cada fila 
+y las filas son ordenadas de orden descendiente por medio de la ID.
 
 Actualmente se esta usando para la edicion inlineEdit, es decir si haces clic en una linea puedes 
 editar los datos desde la grid, es por eso que declaramos el startEdit y agregando en las columnas
@@ -337,9 +339,7 @@ NOTA: Vease de que el inlineEdit requiere de un controlador, por lo que tenemos 
 ```
 
 
-Puedes tambien usar el applyAction para poder hacer cada fila clickeable y nos redirija al edit, selectionsColumn es 
-usado para poder generar los checkbox para cada fila y las filas son ordenadas de orden descendiente 
-por medio de la ID.
+Puedes tambien usar el applyAction para poder hacer cada fila clickeable y nos redirija al edit.
 Recuerda entonces de que si deseas que cada fila sea cliqueable para redigir al edit form toma en cuenta esto:
 ```xml
     <childDefaults>
@@ -383,7 +383,7 @@ Procedemos ahora a armar el Toolbar (`<listingToolbar name="listing_top">`), el 
 ```
 
 ### IMPORTANTE:
-Para el funcion amiento del filtersearch y que busque por el title, hay que volver al archivo 
+Para el funcionamiento del filtersearch y que busque por el title, hay que volver al archivo 
 db_schema.xml y agregar el siguiente nodo:
 ```xml
     <index referenceId="BLOG_POST_TITLE" indexType="fulltext">
@@ -416,11 +416,11 @@ Luego puede proceder con la prueba del campo filterSearch en base al `title`.
 Requerimos de un controlador MassDelete: `Devlat\Blog\Controller\Adminhtml\Post\MassDelete` donde aplicamos la 
 lógica  de como se ejecutará la eliminación de los items en tabla `blog_post`.
 
-## DATAPROVIDER
+## DataProvider
 Creamos como siguiente paso el data provider en la siguiente ruta: `Devlat\Blog\Ui\DataProvider\Post`.
 justo ahi necesitaremos para tener datos mejor estructurados para nuestros UI Components.
 
-## UI Component
+## Form
 Creamos el UI component para el add en `view/adminhtml/layout/blog_post_add.xml` en donde creamos el componente:
 
 ```xml
@@ -432,7 +432,7 @@ Creamos el UI component para el add en `view/adminhtml/layout/blog_post_add.xml`
 ```
 
 El cual necesitamos para el form, ahora creando el archivo `view/adminhtml/ui_component/devlat_blog_post_form.xml`.
-Aca configuramos el form component para que guarde la data:
+Acá configuramos el form component para que guarde la data:
 ```xml
     <argument name="data" xsi:type="array">
         <item name="template" xsi:type="string">templates/form/collapsible</item>
@@ -442,8 +442,8 @@ Aca configuramos el form component para que guarde la data:
         <dataScope>data</dataScope>
     </settings>
 ```
-Por ello es wue precisamos de usar el dataScope, la data sera guardada en la propiedad "data", y la razon es que en JS
- en modulo Magneto_Ui en `view/base/web/js/form/provider.js` se tiene definido asi la propiedad en metodo **save()**.
+Por ello es que precisamos de usar el dataScope, la data sera guardada en la propiedad "data", y la razon es que en JS
+ en módulo Magento_Ui en `view/base/web/js/form/provider.js` se tiene definido así la propiedad en metodo **save()**.
 
 Lo siguiente es agregar el dataSource con el dataProvider incluido:
 ```xml
@@ -520,7 +520,7 @@ Procedemos con agregar campos al form de Post:
         </field>
     </fieldset>
 ```
-Agregamos el boton de Save que ejecutara accion tanto de Add como Edit, en este caso lo agregamos al xml de 
+Agregamos el boton de Save que ejecutará la accion tanto de Add como Edit, en éste caso lo agregamos al xml de 
 `devlat_blog_post_form.xml` de la siguiente manera:
 En nodo settings, agregamos:
 ```xml
@@ -546,7 +546,7 @@ En el controlador Save (`Devlat\Blog\Controller\Adminhtml\Post\Save`) está toda
 Para el agregado del boton ATRAS, es sencillo, necesitamos solo de la clase 
 `Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Back` y en el xml lo agregamos tal como hicimos con el botton Save:
 ```xml
-    <button name="save" class="Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Save"/>
+    <button name="back" class="Devlat\Blog\Block\Adminhtml\Post\Edit\Button\Back"/>
 ```
 
 Y como último detalle no olvides que las validaciones en los campos son vitales para tener datos bien 
@@ -563,3 +563,5 @@ Puedes agregar una o más reglas para tus fields.
 
 Sigue cuidadosamente la elaboración de tu grid, puede que este README te ayude y sea de mayor 
 utilidad para el desarrollo y este módulo te ahorre tiempo a futuro en tu trabajo.
+
+**Ing. Oscar Rolando Gamboa Acho.** 🇧🇴

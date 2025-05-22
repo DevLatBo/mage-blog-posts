@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Devlat\Blog\Setup\Patch\Data;
 
+use Devlat\Blog\Model\ResourceModel\Post;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -74,7 +75,7 @@ class InitialPosts implements DataPatchInterface
                 'content'       =>  'Just for testing.'
             ],
         ];
-        $connection->insertMultiple('blog_post', $data);
+        $connection->insertMultiple(Post::MAIN_TABLE, $data);
         $this->moduleDataSetup->endSetup();
         return $this;
     }

@@ -9,8 +9,6 @@ use Devlat\Blog\Model\ResourceModel\Post as PostResourceModel;
 class Collection extends AbstractCollection
 {
 
-    protected $_idFieldName = 'id';
-
     protected function _construct(): void
     {
         $this->_init(PostModel::class,

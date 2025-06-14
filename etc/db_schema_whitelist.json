@@ -1,16 +1,16 @@
 {
-    "blog_post": {
+    "devlat_blog_post": {
         "column": {
             "id": true,
             "title": true,
             "publish_date": true,
             "content": true
         },
+        "index": {
+            "DEVLAT_BLOG_POST_TITLE": true
+        },
         "constraint": {
             "PRIMARY": true
-        },
-        "index": {
-            "BLOG_POST_TITLE": true
         }
     }
 }

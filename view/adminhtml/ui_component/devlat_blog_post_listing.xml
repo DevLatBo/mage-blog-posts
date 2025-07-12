@@ -4,10 +4,10 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing_data_source</item>
-            <item name="deps" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing_data_source</item>
+            <item name="provider" xsi:type="string">
+                devlat_blog_post_listing.devlat_blog_post_listing_data_source
+            </item>
         </item>
-        <item name="spinner" xsi:type="string">devlat_blog_post_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
@@ -17,28 +17,27 @@
             </item>
         </item>
     </argument>
-    <dataSource name="devlat_blog_post_listing_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">devlat_blog_post_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <!-- Add below tag -->
-                    <item name="storageConfig" xsi:type="array">
-                        <!-- Set it to your table primary key -->
-                        <item name="indexField" xsi:type="string">id</item>
-                    </item>
-                </item>
-            </argument>
-        </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
+    <settings>
+        <deps>
+            <dep>devlat_blog_post_listing.devlat_blog_post_listing_data_source</dep>
+        </deps>
+        <spinner>devlat_blog_post_columns</spinner>
+    </settings>
+    <dataSource name="devlat_blog_post_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+        </settings>
+        <aclResource>Devlat_Blog::posts</aclResource>
+        <dataProvider name="devlat_blog_post_listing_data_source"
+                      class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
         <settings>

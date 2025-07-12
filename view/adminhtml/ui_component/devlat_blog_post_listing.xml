@@ -61,7 +61,9 @@
         <filterSearch name="fulltext"/>
         <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
              <settings>
-                 <selectProvider>devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.ids</selectProvider>
+                 <selectProvider>
+                     devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.ids
+                 </selectProvider>
                  <indexField>id</indexField>
              </settings>
              <action name="delete">
@@ -102,58 +104,48 @@
             </editorConfig>
         </settings>
         <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">id</item>
-                    <item name="sorting" xsi:type="string">desc</item>
-                    <item name="sortOrder" xsi:type="number">0</item>
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>55</resizeDefaultWidth>
+            </settings>
         </selectionsColumn>
-        <column name="title">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Title</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">text</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
+        <column name="id">
+            <settings>
+                <label translate="true">ID</label>
+                <filter>text</filter>
+                <sorting>asc</sorting>
+                <visible>false</visible>
+            </settings>
         </column>
-        <column name="publish_date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="dateFormat" xsi:type="string">dd/MM/Y</item>
-                    <item name="label" xsi:type="string" translate="true">Publish Date</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">date</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                </item>
-            </argument>
+        <column name="title">
+            <settings>
+                <label translate="true">Title</label>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+            </settings>
+        </column>
+        <column name="publish_date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <label translate="true">Publish Date</label>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <dateFormat>dd/MM/Y</dateFormat>
+                <editor>
+                    <editorType>date</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+            </settings>
         </column>
         <actionsColumn name="actions" class="Devlat\Blog\Ui\Component\Listing\Grid\Column\Action">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
-                    <item name="indexField" xsi:type="string">id</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
-                </item>
-            </argument>
+
         </actionsColumn>
     </columns>
 </listing>

@@ -26,7 +26,7 @@ la elaboración de tareas.
 
 ## Creacion tabla para BD
 Como primer paso se recomienda crear una tabla para la base de 
-datos, para este ejemplo se crea la tabla `blog_post`.
+datos, para este ejemplo se crea la tabla `devlat_blog_post`.
 
 Cabe declarar de que todo nombre para una tabla de la base de datos debe 
 ser en **singular**, esta tabla que se crea contiene los datos como ser:
@@ -180,16 +180,15 @@ Iniciando con la construccion del grid
     
 </listing>
 ```
-Para ello primero iniciamos primero con colocar el boton de Agregar y luego 
-tambien con las columnas para los datos:
+Preparamos el grid para que puedan ser mostrados los datos (source data):
 
 ```xml
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing_data_source</item>
-            <item name="deps" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing_data_source</item>
+            <item name="provider" xsi:type="string">
+                devlat_blog_post_listing.devlat_blog_post_listing_data_source
+            </item>
         </item>
-        <item name="spinner" xsi:type="string">devlat_blog_post_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
@@ -199,46 +198,86 @@ tambien con las columnas para los datos:
             </item>
         </item>
     </argument>
-    <dataSource name="devlat_blog_post_listing_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">devlat_blog_post_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <!-- Add below tag -->
-                    <item name="storageConfig" xsi:type="array">
-                        <!-- Set it to your table primary key -->
-                        <item name="indexField" xsi:type="string">id</item>
-                    </item>
-                </item>
-            </argument>
-        </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
+    <settings>
+        <deps>
+            <dep>devlat_blog_post_listing.devlat_blog_post_listing_data_source</dep>
+        </deps>
+        <spinner>devlat_blog_post_columns</spinner>
+    </settings>
+    <dataSource name="devlat_blog_post_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+        </settings>
+        <aclResource>Devlat_Blog::posts</aclResource>
+        <dataProvider name="devlat_blog_post_listing_data_source"
+                      class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
 ```
 Favor tomar nota lo siguiente del XML, preparamos todo los datos para columnas (**columns**), tambien 
 preparamos el boton de Add New Post, en `buttons` dando el nombre, la ruta y el tipo de boton.
 
-Es importante declarar spinner ya que lo contrario no mostrará el grid como se esperaba.
-En Data Provider se encarga de gestionar los datos y es importante que tomen en consideracion lo siguiente, el 
-sigueinte codigo:
-```xml
-<!-- Add below tag -->
-<item name="storageConfig" xsi:type="array">
-    <!-- Set it to your table primary key -->
-    <item name="indexField" xsi:type="string">id</item>
+``` xml
+<item name="buttons" xsi:type="array">
+    <item name="add" xsi:type="array">
+        <item name="name" xsi:type="string">add</item>
+        <item name="label" xsi:type="string" translate="true">Add New Post</item>
+        <item name="class" xsi:type="string">primary</item>
+        <item name="url" xsi:type="string">*/*/add</item>
+    </item>
 </item>
 ```
+
+Es importante declarar spinner para indicar que los datos se estan cargando.
+```xml
+    <spinner>devlat_blog_post_columns</spinner>
+```
+En Data Provider se encarga de obtener y preparar los datos:
+```xml
+<dataProvider name="devlat_blog_post_listing_data_source"
+                      class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <settings>
+        <requestFieldName>id</requestFieldName>
+        <primaryFieldName>id</primaryFieldName>
+    </settings>
+</dataProvider>
+```
+**Nodo requestFieldName** es el nombre del campo clave primaria en la base de datos.
+
+**Nodo primaryFieldName** es el nombre del parámetro que se envía en las URLs o peticiones 
+(por ejemplo, cuando haces clic en editar un ítem).
+
+Dntro de dataSource notese que usamos el storageConfig:
+```xml
+<dataSource name="devlat_blog_post_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <settings>
+        <updateUrl path="mui/index/render"/>
+        <storageConfig>
+            <param name="indexField" xsi:type="string">id</param>
+        </storageConfig>
+    </settings>
+</dataSource>
+```
+
 Se encarga de que los datos puedan visualizarse correctamente despues de ejecutar una acción, ya 
 sea despues de editar, agregar o buscar algun dato. Sin esto, los datos o filas se van a ir repitiendo o 
 no se visualizan en la grid correctamente.
+
+Para controlar el acceso a la grid incluimos dentro de dataSource incluimos el AclResource:
+```xml
+<dataSource name="devlat_blog_post_listing_data_source" component="Magento_Ui/js/grid/provider">
+    ...
+    <aclResource>Devlat_Blog::posts</aclResource>
+    ...
+</dataSource>
+```
 
 Las columnas se las elabora de la siguiente manera:
 ```xml
@@ -267,84 +306,82 @@ Las columnas se las elabora de la siguiente manera:
             </editorConfig>
         </settings>
         <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">id</item>
-                    <item name="sorting" xsi:type="string">desc</item>
-                    <item name="sortOrder" xsi:type="number">0</item>
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>55</resizeDefaultWidth>
+            </settings>
         </selectionsColumn>
-        <column name="title">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Title</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">text</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
+        <column name="id">
+            <settings>
+                <label translate="true">ID</label>
+                <filter>text</filter>
+                <sorting>asc</sorting>
+                <visible>false</visible>
+            </settings>
         </column>
-        <column name="publish_date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="dateFormat" xsi:type="string">dd/MM/Y</item>
-                    <item name="label" xsi:type="string" translate="true">Publish Date</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">date</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                </item>
-            </argument>
+        <column name="title">
+            <settings>
+                <label translate="true">Title</label>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+            </settings>
+        </column>
+        <column name="publish_date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <label translate="true">Publish Date</label>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <dateFormat>dd/MM/Y</dateFormat>
+                <editor>
+                    <editorType>date</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+            </settings>
         </column>
         <actionsColumn name="actions" class="Devlat\Blog\Ui\Component\Listing\Grid\Column\Action">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
-                    <item name="indexField" xsi:type="string">id</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
-                </item>
-            </argument>
+
         </actionsColumn>
     </columns>
 ```
-Note que tenemos selectionsColumn que es usado para poder generar los checkbox para cada fila 
-y las filas son ordenadas de orden descendiente por medio de la ID.
+Note que tenemos selectionsColumn que es usado para poder generar los checkbox para cada fila.
 
 Actualmente se esta usando para la edicion inlineEdit, es decir si haces clic en una linea puedes 
 editar los datos desde la grid, es por eso que declaramos el startEdit y agregando en las columnas
 que deseamos que puedan ser editables el nodo item con name "editor"
 
 NOTA: Vease de que el inlineEdit requiere de un controlador, por lo que tenemos el controlador desarrollado 
-`Devlat\Blog\Controller\Adminhtml\Post\InlineEdit` para ejceutar esta tarea.
+`Devlat\Blog\Controller\Adminhtml\Post\InlineEdit` para ejecutar esta tarea.
 
 ```xml
-<item name="editor" xsi:type="array">
-...
-</item>
+<editorConfig>
+    <param name="clientConfig" xsi:type="array">
+        <item name="saveUrl" xsi:type="url" path="*/*/inlineEdit"/>
+        <item name="validateBeforeSave" xsi:type="boolean">false</item>
+    </param>
+    <param name="selectProvider" xsi:type="string">
+        devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.ids
+    </param>
+    <param name="indexField" xsi:type="string">id</param>
+    <param name="enabled" xsi:type="boolean">true</param>
+</editorConfig>
 ```
-
 
 Puedes tambien usar el applyAction para poder hacer cada fila clickeable y nos redirija al edit.
 Recuerda entonces de que si deseas que cada fila sea cliqueable para redigir al edit form toma en cuenta esto:
 ```xml
     <childDefaults>
         <param name="fieldAction" xsi:type="array">
-            <item name="provider" xsi:type="string">devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.actions</item>
+            <item name="provider" xsi:type="string">
+                devlat_blog_post_listing.devlat_blog_post_listing.devlat_blog_post_columns.actions
+            </item>
             <item name="target" xsi:type="string">applyAction</item>
             <item name="params" xsi:type="array">
                 <item name="0" xsi:type="string">edit</item>
@@ -354,7 +391,7 @@ Recuerda entonces de que si deseas que cada fila sea cliqueable para redigir al 
     </childDefaults>
 ```
 
-Luego como veran tenemos las otras columnas para title y publish_date con sus respectivas configuraciones, para 
+Luego como verán tenemos las otras columnas para title y publish_date con sus respectivas configuraciones, para 
 actionsColumn usamos para poder generar enlaces tipo dropdown de EDIT y DELETE. **OJO**, este requiere 
 de una clase Action como se ve en el código, el path es `Devlat\Blog\Ui\Component\Listing\Grid\Column\Action`, gracias 
 a esta clase en método `prepareDataSource` podremos generar el enlace o enlaces (dropdown).
@@ -383,16 +420,19 @@ Procedemos ahora a armar el Toolbar (`<listingToolbar name="listing_top">`), el 
 ```
 
 ### IMPORTANTE:
-Para el funcionamiento del filtersearch y que busque por el title, hay que volver al archivo 
-db_schema.xml y agregar el siguiente nodo:
+1. Para el funcionamiento del filtersearch y que busque por el title, hay que volver al archivo 
+db_schema.xml y agregar el siguiente nodo para proceder con la prueba del filterSearch en base al `title`:
 ```xml
     <index referenceId="BLOG_POST_TITLE" indexType="fulltext">
             <column name="title"/>
     </index>
 ```
-Luego puede proceder con la prueba del campo filterSearch en base al `title`.
+2. Importante tomar en cuenta de que si agregas una nueva columna a la grid desde el XML, lo agregará
+   al final y no en una posición deseada, para que tome efecto real, dirijase a la BD a la tabla
+   ui_bookmarks y busque por el namespace `devlat_settings_tracker_listing` y borrelo, una vez hecho eso
+   limpie cache y vera que su columna estara en una posicion deseada.
 
-* Para MassActton: Dropdown donde agregamos el delete para ejecutar el eliminado de uno o mas items en grid:
+* Para MassActton: Es un Dropdown donde agregamos el delete para ejecutar el eliminado de uno o mas items en grid:
 ```xml
 <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
      <settings>

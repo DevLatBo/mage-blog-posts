@@ -1,9 +1,9 @@
 # Elaboración de Grid Custom
 
-Este módulo contiene una grid desarrollada para el admin que fue elaborado a 
-partir de una tabla custom y describiremos aca el paso a paso 
-para poder elaborar nuestra propia grid.
-
+Este módulo en su versión 1.0.1 contiene una grid elaborada para el 
+admin a partir de una tabla custom y describiremos acá el paso a paso 
+para construir nuestra propia grid usando este módulo como orientación y/o 
+referencia.
 
 ### Propósito
 Este módulo tiene el objetivo de usarlo como referencia para poder 

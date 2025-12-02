@@ -1,0 +1,31 @@
+{
+    "name": "devlat/module-blog",
+    "description": "Devlat Blog module for Magento 2",
+    "type": "magento2-module",
+    "version": "1.0.2",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "authors": [
+        {
+            "name": "Oscar Rolando Gamba Acho",
+            "email": "oskr.cbba2010@gmail.com",
+            "role": "Full Stack Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "magento/framework": "*"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Devlat\\Blog\\": ""
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

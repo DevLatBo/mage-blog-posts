@@ -10,12 +10,13 @@ class Uninstall implements UninstallInterface
 {
 
     const TABLE_NAME = 'devlat_blog_post';
+
     public function uninstall(SchemaSetupInterface $setup, ModuleContextInterface $context): void
     {
         $setup->startSetup();
 
         $connection = $setup->getConnection();
-        $tableName = $setup->getTable(self::TABLE_NAME);
+        $tableName = $connection->getTableName(self::TABLE_NAME);
 
         if ($connection->isTableExists($tableName)) {
             $connection->dropTable($tableName);

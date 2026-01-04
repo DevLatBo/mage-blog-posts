@@ -17,4 +17,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="blogCleanUp" xsi:type="object">Devlat\Blog\Console\CleanUp</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

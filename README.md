@@ -23,6 +23,7 @@ la elaboración de tareas.
 * [UI Listing Layout](#ui-listing-layout)
 * [DataProvider](#dataprovider)
 * [Form](#form)
+* [Desinstalar Modulo](#desinstalar-modulo)
 
 ## Creacion tabla para BD
 Como primer paso se recomienda crear una tabla para la base de 
@@ -598,6 +599,19 @@ almacenados, por ello en los fields agregamos reglas como ser:
 ```
 
 Puedes agregar una o más reglas para tus fields.
+
+## Desinstalar Modulo
+Si deseas eliminar el módulo y su tabla de la base de datos, toma en cuenta los siguiente:
+
+Se tiene creado el comando `devlat:blog:cleanup` que ejecutará la eliminación de la tabla `devlat_blog_post`, 
+pero antes de ejecutar por completo la acción se le pregunta al usuario confirmando de que si esta seguro de ejecutarlo.
+
+Se recomienda ejecutar este comando antes de deshabilitar el modulo y eliminarlo y asi no tener la tabla 
+suelta en la base de datos sin que este cumpliendo un rol especifico en otro modulo.
+
+Tomar en cuenta tambien que ejecutar el comando es **opcional**, ya que posiblemente el usuario desee conservar los datos.
+
+Ya luego de eso el usuario puede deshabilitar el módulo y eliminarlo.
 
 ---
 

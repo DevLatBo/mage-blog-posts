@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Post Grid -->
     <preference for="Devlat\Blog\Api\Data\PostInterface" type="Devlat\Blog\Model\Post" />
     <virtualType name="Devlat\Blog\Model\ResourceModel\Post\Grid\Collection"
                  type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
@@ -17,7 +17,7 @@
             </argument>
         </arguments>
     </type>
-
+    <!-- Registering the CLI command -->
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">

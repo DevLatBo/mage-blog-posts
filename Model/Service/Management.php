@@ -6,6 +6,7 @@ use Magento\Framework\App\ResourceConnection;
 
 class Management
 {
+    /** @var string Table Name */
     const TABLE_NAME = "devlat_blog_post";
     /**
      * @var ResourceConnection
